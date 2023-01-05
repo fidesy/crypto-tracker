@@ -1,0 +1,11 @@
+[
+    {"name": "Bitcoin", "symbol": "btcusdt", "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"},
+    {"name": "Ethereum", "symbol": "ethusdt", "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png"},
+    {"name": "BNB", "symbol": "bnbusdt", "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png"},
+    {"name": "XRP", "symbol": "xrpusdt", "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/52.png"},
+    {"name": "Dogecoin", "symbol": "dogeusdt", "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png"},
+    {"name": "Cardano", "symbol": "adausdt", "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png"},
+    {"name": "Polygon", "symbol": "maticusdt", "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png"},
+    {"name": "Polkadot", "symbol": "dotusdt", "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png"},
+    {"name": "Uniswap", "symbol": "uniusdt", "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png"}
+]
