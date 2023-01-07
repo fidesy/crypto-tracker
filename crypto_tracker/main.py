@@ -36,7 +36,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 
 @app.get("/users/{user_id}/portfolio/", response_model=list[schemas.Portfolio])
-def read_portfolio(user_id: int, db: Session = Depends(get_db)):
+def get_portfolio(user_id: int, db: Session = Depends(get_db)):
     return crud.get_portfolio_by_user_id(db, user_id)
 
 
@@ -59,11 +59,17 @@ def delete_portfolio_asset(user_id: int, portfolio_id: int, db: Session = Depend
     return crud.delete_portfolio_asset(db, portfolio_id)
 
 
+# response model include date and close price
+@app.get("/users/{user_id}/portfolio/{portfolio_title}/")
+def get_portfolio_prices(user_id: int, portfolio_title: str, db: Session = Depends(get_db)):
+    return crud.get_portfolio_prices(db, user_id, portfolio_title)
+
+
 @app.get("/currencies/", response_model=list[schemas.Currency])
 def get_currencies(db: Session = Depends(get_db)):
     return crud.get_curencies(db)
+  
 
-
-@app.get("/klines/{symbol}/", response_model=list[schemas.Candlestck])
+@app.get("/klines/{symbol}/", response_model=list[schemas.Candlestick])
 def get_candlesticks(symbol: str , db: Session = Depends(get_db)):
     return crud.get_candlesticks(db, symbol)

@@ -2,7 +2,7 @@ from datetime import date
 from pydantic import BaseModel
 
 
-class Candlestck(BaseModel):
+class Candlestick(BaseModel):
     date: date
     symbol: str
     open: float
@@ -27,6 +27,7 @@ class CurrencyCreate(CurrencyBase):
 
 class Currency(CurrencyBase):
     id: int
+    price: float | None = None
 
     class Config:
         orm_mode = True

@@ -6,7 +6,7 @@ export default function Dashboard() {
     const userID = 1
     const [portfolio, setPortfolio] = useState([]) 
     const [candlesticks, setCandlesticks] = useState([])
-    const [symbol, setSymbol] = useState("btcusdt")
+    // const [symbol, setSymbol] = useState("btcusdt")
 
 
     const fetchPortfolio = async () => {
@@ -19,9 +19,19 @@ export default function Dashboard() {
         }
     }
 
-    const fetchCandlesticks = async () => {
+    // const fetchCandlesticks = async () => {
+    //     try {
+    //         const resp = await fetch(`http://localhost:8000/klines/${symbol}/`)
+    //         const res = await resp.json()
+    //         setCandlesticks(res)
+    //     } catch(e) {
+    //         console.log(e)
+    //     }
+    // }
+
+    const fetchPortfolioPrices = async () => {
         try {
-            const resp = await fetch(`http://localhost:8000/klines/${symbol}/`)
+            const resp = await fetch(`http://localhost:8000/users/${userID}/portfolio/test/`)
             const res = await resp.json()
             setCandlesticks(res)
         } catch(e) {
@@ -43,7 +53,6 @@ export default function Dashboard() {
         }
 
         let amount = parseFloat(value)
-        console.log(value, amount)
         if (isNaN(amount)) {
             return
         }
@@ -91,8 +100,9 @@ export default function Dashboard() {
     }, [])
 
     useEffect(() => {
-        fetchCandlesticks()
-    }, [symbol])
+        // fetchCandlesticks()
+        fetchPortfolioPrices()
+    }, [portfolio])
                
     return (
        <div id="dashboard" className="xl:w-1/2 xl:absolute xl:left-1/4 md:m-10 m-5">
@@ -101,7 +111,7 @@ export default function Dashboard() {
             </div>
 
             <div className="p-5 bg-white rounded-lg">
-                <Chart candlesticks={candlesticks} title={symbol.toUpperCase()}/>
+                <Chart candlesticks={candlesticks} title="Portfolio"/>
             </div>
 
 
@@ -110,18 +120,22 @@ export default function Dashboard() {
                 <div className="bg-white rounded-lg">
                     {portfolio.length != 0 && portfolio.map(asset => {
                         return (
-                            <div className={"flex justify-between items-center " + (symbol === asset.currency.symbol ? "bg-slate-200/50" : "")} onClick={() => setSymbol(asset.currency.symbol)}>
+                            // onClick={() => setSymbol(asset.currency.symbol)}
+                            // + (symbol === asset.currency.symbol ? "bg-slate-200/50" : "")
+                            <div className={"grid grid-cols-3 flex items-center "} >
                                 <div className="mx-5 p-5 flex items-center">
                                     <img src={asset.currency.image_url} alt="logo" width="40" className="rounded-xl"/>
                                     <div className="mx-5 font-bold">{asset.currency.name}</div>
                                 </div>
                                 <input type="text" className="rounded-lg p-2 bg-transparent outline-0" value={asset.amount} onChange={({target}) => handleChangeAmount(asset.id, target.value)}/>
-                                <button 
-                                    className="mx-4 px-5 p-2 bg-red-500/50 rounded-xl font-bold hover:bg-red-500"
-                                    onClick={() => handleDelete(asset.id)}
-                                    >
-                                        Delete
-                                </button>
+                                <div className="flex justify-end">
+                                    <button 
+                                        className="mx-4 px-5 p-2 bg-red-500/50 rounded-xl font-bold hover:bg-red-500"
+                                        onClick={() => handleDelete(asset.id)}
+                                        >
+                                            Delete
+                                    </button>
+                                </div>
                             </div>
                         )
                     })}

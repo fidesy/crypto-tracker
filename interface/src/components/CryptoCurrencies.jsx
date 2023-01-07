@@ -46,15 +46,21 @@ export default function CryptoCurrencies() {
                 {currencies.map(currency => {
                     return (
                         <div className="p-2">
-                            <div className="mx-5 p-3 flex justify-between">
+                            <div className="mx-5 p-3 grid grid-cols-3 flex items-center">
+
                                 <div className="flex items-center">
                                     <img src={currency.image_url} alt="logo" width="30" className="rounded-xl"/>
                                     <div className="mx-2 font-bold">{currency.name}</div>
                                 </div>
-                                <button 
-                                    className="px-4 py-2 bg-slate-300/50 rounded-lg text-sky-600 font-semibold border hover:bg-sky-200/50 hover:border-sky-300"
-                                    onClick={() => handleAddAsset(currency.id)}
-                                    >Add</button>
+                                <div className="">${currency.price}</div>
+
+                                <div className="flex justify-end">
+                                    <button 
+                                        className="px-4 py-2 bg-slate-300/50 rounded-lg text-sky-600 font-semibold border hover:bg-sky-200/50 hover:border-sky-300"
+                                        onClick={() => handleAddAsset(currency.id)}
+                                        >Add
+                                    </button>
+                                </div>
                             </div>
                             <hr />
                         </div>
