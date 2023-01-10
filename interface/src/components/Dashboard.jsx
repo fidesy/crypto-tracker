@@ -11,9 +11,9 @@ export default function Dashboard() {
 
     const fetchPortfolio = async () => {
         try {
-            const resp = await fetch(`http://localhost:8000/users/${userID}/portfolio/`)
+            const resp = await fetch(`http://localhost:8000/users/${userID}/portfolios/1`)
             const res = await resp.json()
-            setPortfolio(res)
+            setPortfolio(res.assets)
         } catch(e) {
             console.log(e)
         }
@@ -31,7 +31,7 @@ export default function Dashboard() {
 
     const fetchPortfolioPrices = async () => {
         try {
-            const resp = await fetch(`http://localhost:8000/users/${userID}/portfolio/test/`)
+            const resp = await fetch(`http://localhost:8000/users/${userID}/portfolios/1/prices`)
             const res = await resp.json()
             setCandlesticks(res)
         } catch(e) {
@@ -59,12 +59,12 @@ export default function Dashboard() {
 
         try {
             const resp = await fetch(
-                `http://localhost:8000/users/${userID}/portfolio/`, {
+                `http://localhost:8000/users/${userID}/portfolios/1/`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({id: portfolio_id, amount: amount})
+                body: JSON.stringify({id: portfolio_id, amount: amount, currency_id: 0})
             })
 
             if (resp.status === 200) {
@@ -84,7 +84,7 @@ export default function Dashboard() {
     const handleDelete = async (portfolio_id) => {
         try {
             const resp = await fetch(
-                `http://localhost:8000/users/${userID}/portfolio/${portfolio_id}/`, { method: "DELETE" })
+                `http://localhost:8000/users/${userID}/portfolios/1/assets/${portfolio_id}/`, { method: "DELETE" })
 
             if (resp.status == 200) {
                 let portfolio_ = portfolio.filter(p => p.id != portfolio_id)

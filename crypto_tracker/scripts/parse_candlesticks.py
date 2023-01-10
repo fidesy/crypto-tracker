@@ -5,12 +5,26 @@ import psycopg2
 import requests
 
 
+CANDLESTICKS_SCHEME = """
+CREATE TABLE IF NOT EXISTS candlesticks(
+    date   TIMESTAMP PRIMARY KEY,
+    symbol TEXT PRIMARY KEY,
+    open   REAL,
+    high   REAL,
+    low    REAL,
+    close  REAL,
+    volume REAL   
+)
+"""
+
+
 def parse_candlesticks():
     with psycopg2.connect(os.getenv("DBURL")) as connection:
         connection.autocommit = True
         cursor = connection.cursor()
-        symbols = get_symbols(cursor)
+        cursor.execute(CANDLESTICKS_SCHEME)
 
+        symbols = get_symbols(cursor)
         for symbol in symbols:
             candlesticks = get_candlesticks(symbol, "1d", 200)
             save_candlesticks(cursor, candlesticks)

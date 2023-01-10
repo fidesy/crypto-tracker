@@ -18,7 +18,7 @@ export default function CryptoCurrencies() {
     const handleAddAsset = async (currency_id) => {
         try {
             const resp = await fetch(
-                `http://localhost:8000/users/${userID}/portfolio/`, {
+                `http://localhost:8000/users/${userID}/portfolios/1/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -27,7 +27,6 @@ export default function CryptoCurrencies() {
             })
 
             const res = await resp.json()
-            console.log(res)
         } catch(e) {
             console.log(e)
         }
