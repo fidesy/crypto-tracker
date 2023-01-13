@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import Chart from "./Chart";
 
+import { getUserByEmail, fetchPortfolios } from "./Functions";
+
 
 export default function Dashboard() {
-    const userID = 1
-    const portfolioID = 1
+    const userEmail = "example@gmail.com"
+    const [userID, setUserID] = useState(0)
+    const [portfolioID, setPortfolioID] = useState(0)
     const [portfolio, setPortfolio] = useState([]) 
     const [candlesticks, setCandlesticks] = useState([])
     // const [symbol, setSymbol] = useState("btcusdt")
@@ -13,7 +16,6 @@ export default function Dashboard() {
         try {
             const resp = await fetch(`http://localhost:8000/users/${userID}/portfolios/${portfolioID}/`)
             const res = await resp.json()
-            console.log(res)
             setPortfolio(res.assets)
         } catch(e) {
             console.log(e)
@@ -82,13 +84,13 @@ export default function Dashboard() {
         }
     }
 
-    const handleDelete = async (portfolio_id) => {
+    const handleDelete = async (assetID) => {
         try {
             const resp = await fetch(
-                `http://localhost:8000/users/${userID}/portfolios/1/assets/${portfolio_id}/`, { method: "DELETE" })
+                `http://localhost:8000/users/${userID}/portfolios/${portfolioID}/assets/${assetID}/`, { method: "DELETE" })
 
             if (resp.status == 200) {
-                let portfolio_ = portfolio.filter(p => p.id != portfolio_id)
+                let portfolio_ = portfolio.filter(p => p.id != assetID)
                 setPortfolio(portfolio_)
             }
         } catch(e) {
@@ -97,9 +99,21 @@ export default function Dashboard() {
     }
 
     useEffect(() => {
-        fetchPortfolio()
+        async function getUser() {
+            const id = await getUserByEmail(userEmail)
+            const portfolio_ = await fetchPortfolios(id, "Test")
+            setUserID(id)
+            setPortfolioID(portfolio_)
+        }
+
+        getUser()
     }, [])
 
+    useEffect(() => {
+        if (userID === 0) return
+        
+        fetchPortfolio()
+    }, [userID])
     useEffect(() => {
         // fetchCandlesticks()
         fetchPortfolioPrices()

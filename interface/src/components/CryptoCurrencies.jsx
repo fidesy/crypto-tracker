@@ -1,50 +1,14 @@
 import { useState, useEffect } from "react"
 
+import { getUserByEmail, fetchPortfolios } from "./Functions"
+
 
 export default function CryptoCurrencies() {
-    const [userID, setUserID] = useState(1)
-    const [portfolioID, setPortfolioID] = useState(1)
+    const userEmail = "example@gmail.com"
+    const [userID, setUserID] = useState(0)
+    const [portfolioID, setPortfolioID] = useState(0)
     const [currencies, setCurrencies] = useState([])
 
-    const createUser = async () => {
-        try {
-            const resp = await fetch(
-                `http://localhost:8000/users/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({email: "random@mail.ru", password: "secretpassword"})
-            })
-            const res = await resp.json()
-            if (res.id === 1) {
-                setUserID(res.id)
-            }
-
-        } catch(e) {
-            console.log(e)
-        }
-    }
-
-    const createPortfolio = async () => {
-        try {
-            const resp = await fetch(
-                `http://localhost:8000/users/${userID}/portfolios/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({title: "Test"})
-            })
-            const res = await resp.json()
-            if (res.id === 1) {
-                setPortfolioID(res.id)
-            }
-
-        } catch(e) {
-            console.log(e)
-        }
-    }
 
     const fetchCurrencies = async () => {
         try {
@@ -59,7 +23,7 @@ export default function CryptoCurrencies() {
     const handleAddAsset = async (currency_id) => {
         try {
             const resp = await fetch(
-                `http://localhost:8000/users/${userID}/portfolios/1/`, {
+                `http://localhost:8000/users/${userID}/portfolios/${portfolioID}/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -75,10 +39,23 @@ export default function CryptoCurrencies() {
 
     useEffect(() => {
         fetchCurrencies()
+        async function getUser() {
+            const id = await getUserByEmail(userEmail)
+            setUserID(id)
+        }
+
+        getUser()
     }, [])
 
     useEffect(() => {
-        createUser().then(createPortfolio())
+        if (userID === 0) return
+
+        async function getPortfolio() {
+            const id = await fetchPortfolios(userID, "Test")
+            setPortfolioID(id)
+        }
+
+        getPortfolio()
     }, [userID])
 
 
