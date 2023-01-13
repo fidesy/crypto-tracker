@@ -44,10 +44,7 @@ const createPortfolio = async (userID, title) => {
             body: JSON.stringify({title: title})
         })
         const res = await resp.json()
-        if (res.id === 1) {
-            return res.id
-        }
-
+        return res.id
     } catch(e) {
         console.log(e)
     }
