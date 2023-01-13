@@ -44,7 +44,13 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. run fastapi application
+4. create a .env file with one variable - connection string to your database, depends on PostgreSQL startup settings in step 2.
+```
+# default value
+DBURL=postgresql://postgres:postgres@localhost?sslmode=disable
+```
+
+5. run fastapi application
 ```
 make run
 
@@ -53,13 +59,13 @@ OR
 python -m uvicorn crypto_tracker.main:app --reload
 ```
 
-5. fill in data in tables
+6. fill in data in tables
 ```
 python crypto_tracker/scripts/insert_currencies.py
 python crypto_tracker/scripts/parse_candlesticks.py
 ```
 
-6. install interface dependecies and run it
+7. install interface dependecies and run it
 ```
 cd interface
 npm i

@@ -28,6 +28,7 @@ def parse_candlesticks():
         for symbol in symbols:
             candlesticks = get_candlesticks(symbol, "1d", 200)
             save_candlesticks(cursor, candlesticks)
+            connection.commit()
 
 
 def get_symbols(cursor):
@@ -46,9 +47,14 @@ def get_candlesticks(symbol: str, interval: str, limit: int):
 
     return candlesticks
 
+
 def save_candlesticks(cursor, candlesticks):
-    cursor.executemany("""INSERT INTO candlesticks(date, symbol, open, high, low, close, volume) 
-                            VALUES(%s, %s, %s, %s, %s, %s, %s)""", candlesticks)
+    for candle in candlesticks:
+        try:
+            cursor.execute("""INSERT INTO candlesticks(date, symbol, open, high, low, close, volume) 
+                                VALUES(%s, %s, %s, %s, %s, %s, %s)""", candle)
+        except Exception as e:
+            ...
 
 
 if __name__ == "__main__":
