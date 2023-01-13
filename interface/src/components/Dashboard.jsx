@@ -4,15 +4,36 @@ import Chart from "./Chart";
 
 export default function Dashboard() {
     const userID = 1
+    const [portfolioID, setPortfolioID] = useState(1)
     const [portfolio, setPortfolio] = useState([]) 
     const [candlesticks, setCandlesticks] = useState([])
     // const [symbol, setSymbol] = useState("btcusdt")
 
+    const createPortfolio = async () => {
+        try {
+            const resp = await fetch(
+                `http://localhost:8000/users/${userID}/portfolios/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({title: "Test"})
+            })
+            const res = await resp.json()
+            if (res.id === 1) {
+                setPortfolioID(res.id)
+            }
+
+        } catch(e) {
+            console.log(e)
+        }
+    }
 
     const fetchPortfolio = async () => {
         try {
-            const resp = await fetch(`http://localhost:8000/users/${userID}/portfolios/1`)
+            const resp = await fetch(`http://localhost:8000/users/${userID}/portfolios/${portfolioID}/`)
             const res = await resp.json()
+            console.log(res)
             setPortfolio(res.assets)
         } catch(e) {
             console.log(e)
@@ -31,7 +52,7 @@ export default function Dashboard() {
 
     const fetchPortfolioPrices = async () => {
         try {
-            const resp = await fetch(`http://localhost:8000/users/${userID}/portfolios/1/prices`)
+            const resp = await fetch(`http://localhost:8000/users/${userID}/portfolios/${portfolioID}/prices`)
             const res = await resp.json()
             setCandlesticks(res)
         } catch(e) {
@@ -59,7 +80,7 @@ export default function Dashboard() {
 
         try {
             const resp = await fetch(
-                `http://localhost:8000/users/${userID}/portfolios/1/`, {
+                `http://localhost:8000/users/${userID}/portfolios/${portfolioID}/`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -94,6 +115,10 @@ export default function Dashboard() {
             console.log(e)
         }
     }
+
+    useEffect(() => {
+        createPortfolio()
+    }, [portfolioID])
 
     useEffect(() => {
         fetchPortfolio()

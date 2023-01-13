@@ -7,8 +7,8 @@ import requests
 
 CANDLESTICKS_SCHEME = """
 CREATE TABLE IF NOT EXISTS candlesticks(
-    date   TIMESTAMP PRIMARY KEY,
-    symbol TEXT PRIMARY KEY,
+    date   TIMESTAMP,
+    symbol TEXT,
     open   REAL,
     high   REAL,
     low    REAL,

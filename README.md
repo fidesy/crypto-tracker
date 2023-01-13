@@ -28,6 +28,7 @@ track and visualize crypto investments
 1. clone the repository
 ```
 git clone https://github.com/fidesy/crypto-tracker.git
+cd crypto-tracker
 ```
 
 2. pull and run PostgreSQL image

@@ -2,8 +2,28 @@ import { useState, useEffect } from "react"
 
 
 export default function CryptoCurrencies() {
-    const userID = 1;
+    const [userID, setUserID] = useState(0)
     const [currencies, setCurrencies] = useState([])
+
+    const createUser = async () => {
+        try {
+            const resp = await fetch(
+                `http://localhost:8000/users/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({email: "random@mail.ru", password: "secretpassword"})
+            })
+            const res = await resp.json()
+            if (res.id === 1) {
+                setUserID(res.id)
+            }
+
+        } catch(e) {
+            console.log(e)
+        }
+    }
 
     const fetchCurrencies = async () => {
         try {
@@ -35,6 +55,10 @@ export default function CryptoCurrencies() {
     useEffect(() => {
         fetchCurrencies()
     }, [])
+
+    useEffect(() => {
+        createUser()
+    }, [userID])
 
     return (
         <div className="lg:w-1/2 lg:absolute lg:left-1/4 md:m-10 m-5">

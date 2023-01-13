@@ -21,6 +21,9 @@ def create_portfolio(db: Session, portfolio: schemas.Portfolio, user_id: int) ->
 
 
 def delete_portfolio(db: Session, user_id: int, portfolio_id: int) -> int:
+    # delete all assets from the portfolio
+    db.query(models.Asset).filter(models.Asset.portfolio_id == portfolio_id).delete()
+    
     status = db.query(models.Portfolio).filter(models.Portfolio.user_id == user_id, models.Portfolio.id == portfolio_id).delete()
     db.commit()
     return status
@@ -28,7 +31,6 @@ def delete_portfolio(db: Session, user_id: int, portfolio_id: int) -> int:
 
 def get_portfolio_prices(db: Session, user_id: int, portfolio_id: int):
     assets = db.query(models.Asset).filter(models.Asset.portfolio_id == portfolio_id).all()
-    print(assets)
     prices = {}
     for asset in assets:
         candlesticks = db.query(models.Candlestick).filter(models.Candlestick.symbol == asset.currency.symbol).all()
